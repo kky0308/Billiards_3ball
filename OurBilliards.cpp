@@ -1,24 +1,22 @@
 #include "OurBilliards.hpp"
 
-
 Billiards:: Billiards() {
 	count1, count2 = 0;
 	pre_ang = 0;
 }
 
-Billiards::~Billiards() {
+Billiards::~Billiards() { }
 
-}
-
-double Billiards::GetDistance(const Ball& p1, const Ball& p2)
-{
+//main공과 sub공의 거리
+double Billiards::GetDistance(const Ball& p1, const Ball& p2) {
 	return std::sqrt(double((p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y)));
 }
 
+//main공과 sub공의 충돌여부 판단
 int Billiards::Ang(const Ball& p1, const Ball& p2) {
 	r_flag = 0;
 	ang = atan2f(p1.y - p2.y, p1.x - p2.x) * 180 / 3.1415f;
-	if (abs(abs(ang) - abs(pre_ang)) >8) {
+	if (abs(abs(ang) - abs(pre_ang)) > 8) {
 		r_flag = 1;
 	}
 	else{
@@ -29,31 +27,29 @@ int Billiards::Ang(const Ball& p1, const Ball& p2) {
 	return r_flag;
 }
 
-bool Billiards::collision(Mat& image, Ball& red, Ball& yellow, Ball& white)
+//main공이 나머지 2개의 공 모두와 충돌했는지 성공여부판단
+bool Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
 {
+	b_flag =Ang(mainBall, center);
+	center.x = mainBall.x;
+	center.y = mainBall.y;
 
-	b_flag =Ang(white, center);
-	center.x = white.x;
-	center.y = white.y;
-	if (GetDistance(white, red) >= 22 && GetDistance(white, red) < 38 && b_flag) {
-		putText(image, "Collision", Point(white.x, white.y), FONT_HERSHEY_SIMPLEX,
-			1, Scalar(0, 0, 0), 4);
+	if (GetDistance(mainBall, sub1) >= 22 && GetDistance(mainBall, sub1) < 38 && b_flag) {
+		putText(image, "Collision", Point(mainBall.x, mainBall.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
 		count1++;
 	}
-	if (GetDistance(white, yellow) >= 22 && GetDistance(white, yellow) < 38 && b_flag) {
-		putText(image, "Collision", Point(white.x, white.y), FONT_HERSHEY_SIMPLEX,
-			1, Scalar(0, 0, 0), 4);
+	if (GetDistance(mainBall, sub2) >= 22 && GetDistance(mainBall, sub2) < 38 && b_flag)  {
+		putText(image, "Collision", Point(mainBall.x, mainBall.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
 		count2++;
 	}
 
-	if (count1 >= 1 && count2 >= 1)
-	{
+	//나머지 2개의 공과 충돌이 모두 일어났을 때,
+	if (count1 >= 1 && count2 >= 1) {
 		count1, count2 = 0;
 		return true;
 	}
-	else {
+	else
 		return false;
-	}
 }
 
 void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball) {
@@ -115,7 +111,8 @@ void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max
 	}
 }
 
-bool Billiards::collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushionCount) {
+//메인공과 쿠션의 충돌 횟수 카운트 <수정 필요>
+void Billiards::collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushionCount) {
 	float ballMinX = wall.x + ball.radius;
 	float ballMinY = wall.y + ball.radius;
 	float ballMaxX = wall.width - ball.radius;
@@ -125,8 +122,7 @@ bool Billiards::collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushion
 	if (ball.x < ballMinX) {
 		cushionCount++;
 		//cout << "cushion" << endl;
-		putText(image, "cushion", Point(ball.x, ball.y), FONT_HERSHEY_SIMPLEX,
-			1, Scalar(0, 0, 255), 4);
+		putText(image, "cushion", Point(ball.x, ball.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 4);
 	}
 	else if (ball.x > ballMaxX) {
 		cushionCount++;
@@ -144,8 +140,7 @@ bool Billiards::collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushion
 		//cout << "cushion" << endl;
 		putText(image, "cushion", Point(ball.x, ball.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 4);
 	}
-
-	return true;
+	return;
 }
 
 //1턴 끝난 후
