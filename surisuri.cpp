@@ -73,6 +73,9 @@ int main(int argc, char** argv) {
 
 	if (billiards.is3CushionSuccess(cushionCount)) //쿠션 성공여부
 		cout << "cusionSuccess" << endl;
+	if (billiards.Collision_Success()) {
+		cout << "collisionSuccess" << endl;
+	}
 	cushionCount = 0;
 
 	return 0;

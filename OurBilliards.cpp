@@ -28,7 +28,7 @@ int Billiards::Ang(const Ball& p1, const Ball& p2) {
 }
 
 //main공이 나머지 2개의 공 모두와 충돌했는지 성공여부판단
-bool Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
+void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
 {
 	b_flag =Ang(mainBall, center);
 	center.x = mainBall.x;
@@ -42,14 +42,7 @@ bool Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
 		putText(image, "Collision", Point(mainBall.x, mainBall.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
 		count2++;
 	}
-
 	//나머지 2개의 공과 충돌이 모두 일어났을 때,
-	if (count1 >= 1 && count2 >= 1) {
-		count1, count2 = 0;
-		return true;
-	}
-	else
-		return false;
 }
 
 void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball) {
@@ -152,5 +145,16 @@ bool Billiards::is3CushionSuccess(int& cushionCount) {
 	else {
 		cushionCount = 0;
 		return true;
+	}
+}
+
+bool Billiards::Collision_Success() {
+	if (count1 >= 1 && count2 >= 1) {
+		count1, count2 = 0;
+		return true;
+	}
+	else {
+		count1, count2 = 0;
+		return false;
 	}
 }

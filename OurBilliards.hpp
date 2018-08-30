@@ -32,8 +32,8 @@ public:
 	//공의 충돌
 	double GetDistance(const Ball& p1, const Ball& p2);	//공 사이의 거리
 	int Ang(const Ball& p1, const Ball& p2);			//공끼리 이루는 각도
-	bool collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2);				//공의 충돌여부
-	
+	void collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2);				//공의 충돌여부
+	bool Collision_Success();
 	//쿠션
 	void collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushionCount);	//쿠션과 공의 충돌여부
 	bool is3CushionSuccess(int& cushionCount);										//3쿠션 성공여부
