@@ -1,7 +1,7 @@
 #include "OurBilliards.hpp"
 
-Billiards:: Billiards() {
-	count1, count2 = 0;
+Billiards::Billiards() {
+	count1 = 0; count2 = 0;
 	pre_ang = 0;
 }
 
@@ -16,10 +16,10 @@ double Billiards::GetDistance(const Ball& p1, const Ball& p2) {
 int Billiards::Ang(const Ball& p1, const Ball& p2) {
 	r_flag = 0;
 	ang = atan2f(p1.y - p2.y, p1.x - p2.x) * 180 / 3.1415f;
-	if (abs(abs(ang) - abs(pre_ang)) > 8) {
+	if (abs(abs(ang) - abs(pre_ang)) > 8 && abs(abs(ang) - abs(pre_ang)) < 180) {
 		r_flag = 1;
 	}
-	else{
+	else {
 		r_flag = 0;
 	}
 
@@ -30,7 +30,7 @@ int Billiards::Ang(const Ball& p1, const Ball& p2) {
 //main공이 나머지 2개의 공 모두와 충돌했는지 성공여부판단
 void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
 {
-	b_flag =Ang(mainBall, center);
+	b_flag = Ang(mainBall, center);
 	center.x = mainBall.x;
 	center.y = mainBall.y;
 
@@ -38,7 +38,7 @@ void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2)
 		putText(image, "Collision", Point(mainBall.x, mainBall.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
 		count1++;
 	}
-	if (GetDistance(mainBall, sub2) >= 22 && GetDistance(mainBall, sub2) < 38 && b_flag)  {
+	if (GetDistance(mainBall, sub2) >= 22 && GetDistance(mainBall, sub2) < 38 && b_flag) {
 		putText(image, "Collision", Point(mainBall.x, mainBall.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
 		count2++;
 	}
