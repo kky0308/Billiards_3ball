@@ -63,10 +63,7 @@ void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2){
 
 	s1_flag = Ang(sub1, sub1_pre);
 	s2_flag = Ang(sub2, sub2_pre);
-	cout << " s1: " << s1_flag << endl;
-	cout << " s2: " << s2_flag << endl;
-	cout << " " << GetDistance(mainBall, sub1) << " " << GetDistance(mainBall, sub2) <<  endl;
-	cout << "_____________________________________________" << endl;
+	//cout << "두공 사이의 거리 main sub1: " << GetDistance(mainBall, sub1) << " 두공 사이의 거리 main sub2: " << GetDistance(mainBall, sub2)  << endl;
 	if (GetDistance(sub1, sub1_pre) > 3 && sub1_pre.x != 0) {
 		c_flag++;
 	}
@@ -76,13 +73,13 @@ void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2){
 	if ((GetDistance(mainBall, sub1) >= 18 && GetDistance(mainBall, sub1) < 30 && b_flag) || (c_flag == 1 && GetDistance(sub2, sub2_pre) < 3)) {
 		if (s1_flag) {
 			putText(image, "Collision", Point(sub1.x, sub1.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
-			count1++;
+			//count1++;
 		}
 	}
 	if ((GetDistance(mainBall, sub2) >= 18 && GetDistance(mainBall, sub2) < 30 && b_flag) || (c1_flag == 1 && GetDistance(sub1, sub1_pre) < 3)) {
 		if (s2_flag) {
 			putText(image, "Collision", Point(sub2.x, sub2.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 4);
-			count2++;
+			//count2++;
 		}
 	}
 
@@ -98,59 +95,87 @@ void Billiards::collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2){
 
 }
 
-void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball) {
+//void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball) {
+//
+//	int range_count = 0;
+//	int low_hue1 = 0, low_hue2 = 0;
+//	int high_hue1 = 0, high_hue2 = 0;
+//	Mat imageHSV = image.clone();
+//	Mat resultImage;
+//	vector<cv::Vec3f> v3fCircles;
+//	Scalar lower(min_H, min_S, min_V);
+//	Scalar upper(max_H, max_S, max_V);
+//
+//	if (min_H < 10) {
+//		range_count = 2;
+//
+//		high_hue1 = 180;
+//		low_hue1 = min_H + 180;
+//		high_hue2 = max_H;
+//		low_hue2 = 0;
+//	}
+//	else if (max_H > 170) {
+//		range_count = 2;
+//
+//		high_hue1 = min_H;
+//		low_hue1 = 180;
+//		high_hue2 = max_H - 180;
+//		low_hue2 = 0;
+//	}
+//	else {
+//		range_count = 1;
+//
+//		low_hue1 = min_H;
+//		high_hue1 = max_H;
+//	}
+//
+//	cvtColor(imageHSV, imageHSV, CV_BGR2HSV);
+//	resultImage = Mat::zeros(image.rows, image.cols, image.type());
+//
+//	Mat img_mask1, img_mask2;
+//	inRange(imageHSV, lower, upper, resultImage);
+//	if (range_count == 2) {
+//		inRange(imageHSV, Scalar(low_hue2, 50, 50), Scalar(high_hue2, 255, 255), img_mask2);
+//		resultImage |= img_mask2;
+//	}
+//
+//	dilate(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)));
+//	dilate(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(1, 1)));
+//	erode(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)));
+//
+//	HoughCircles(resultImage, v3fCircles, CV_HOUGH_GRADIENT, 2, resultImage.rows / 16, 40, 22, 8, 11);
+//
+//	for (size_t i = 0; i < v3fCircles.size(); i++) {
+//		Vec3i c = v3fCircles[i];
+//		circle(image, Point(c[0], c[1]), c[2], Scalar(r, g, b), 2, LINE_AA);
+//		ball.x = c[0];
+//		ball.y = c[1];
+//		ball.radius = c[2];
+//	}
+//}
 
-	int range_count = 0;
-	int low_hue1 = 0, low_hue2 = 0;
-	int high_hue1 = 0, high_hue2 = 0;
+void Billiards::A_findColor(Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball) {
+	
 	Mat imageHSV = image.clone();
 	Mat resultImage;
 	vector<cv::Vec3f> v3fCircles;
 	Scalar lower(min_H, min_S, min_V);
 	Scalar upper(max_H, max_S, max_V);
-
-	if (min_H < 10) {
-		range_count = 2;
-
-		high_hue1 = 180;
-		low_hue1 = min_H + 180;
-		high_hue2 = max_H;
-		low_hue2 = 0;
-	}
-	else if (max_H > 170) {
-		range_count = 2;
-
-		high_hue1 = min_H;
-		low_hue1 = 180;
-		high_hue2 = max_H - 180;
-		low_hue2 = 0;
-	}
-	else {
-		range_count = 1;
-
-		low_hue1 = min_H;
-		high_hue1 = max_H;
-	}
-
-	cvtColor(imageHSV, imageHSV, CV_BGR2HSV);
+	
 	resultImage = Mat::zeros(image.rows, image.cols, image.type());
-
+	
 	Mat img_mask1, img_mask2;
 	inRange(imageHSV, lower, upper, resultImage);
-	if (range_count == 2) {
-		inRange(imageHSV, Scalar(low_hue2, 50, 50), Scalar(high_hue2, 255, 255), img_mask2);
-		resultImage |= img_mask2;
-	}
-
+	
 	dilate(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)));
 	dilate(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(1, 1)));
 	erode(resultImage, resultImage, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)));
-
+	
 	HoughCircles(resultImage, v3fCircles, CV_HOUGH_GRADIENT, 2, resultImage.rows / 16, 40, 22, 8, 11);
-
+	
 	for (size_t i = 0; i < v3fCircles.size(); i++) {
 		Vec3i c = v3fCircles[i];
-		//circle(image, Point(c[0], c[1]), c[2], Scalar(r, g, b), 2, LINE_AA);
+		circle(image, Point(c[0], c[1]), c[2], Scalar(r, g, b), 2, LINE_AA);
 		ball.x = c[0];
 		ball.y = c[1];
 		ball.radius = c[2];
@@ -190,6 +215,7 @@ bool Billiards::collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushion
 		putText(image, "cushion", Point(ball.x, ball.y), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 4);
 		return true;
 	}
+//	cout << "공의 (x, y) 좌표 : " << ball.x << " " << ball.y << endl;
 	return false;
 }
 

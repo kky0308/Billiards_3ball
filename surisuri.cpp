@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 	inputVideo.set(CV_CAP_PROP_FRAME_HEIGHT, 1280);
 
 	Mat src;
-	Rect rect(45, 40, 450, 230);
+	Rect rect(50, 30, 550, 290);
 	int cushionCount = 0;
 
 	Billiards billiards;
@@ -41,18 +41,20 @@ int main(int argc, char** argv) {
 	for (;;)
 	{
 		inputVideo >> src;
-		cout << billiards.count1 << " " << billiards.count2 << endl;
+		//cout << billiards.count1 << " " << billiards.count2 << endl;
 		if (src.empty()) 	break;
 		resize(src, src, Size(), 0.5, 0.5, CV_INTER_AREA);
 		src = src(rect);
 
 		//각 공의 정보 저장
 	
-			billiards.A_findColor(src, 119, 102, 117, 179, 255, 255, 0, 255, 0, ball_red);
-			//billiards.A_findColor(src, 7, 0, 167, 179, 65, 255, 255, 0, 0, ball_white);
-			//findColor2(src, fra);
-			billiards.A_findColor(src, 4, 51, 150, 84, 255, 255, 255, 0, 0, ball_yellow);
-			billiards.A_findColor(src, 10, 0, 97, 115, 58, 255, 0, 0, 0, ball_white);
+			//billiards.A_findColor(src, 119, 102, 117, 179, 255, 255, 255, 0, 0, ball_red);
+			//billiards.A_findColor(src, 4, 51, 150, 84, 255, 255, 255, 160, 0, ball_yellow);
+			//billiards.A_findColor(src, 10, 0, 97, 115, 58, 255, 0, 0, 0, ball_white);
+
+			billiards.A_findColor(src, 0, 0, 100, 10, 10, 255, 0, 0, 255, ball_red);
+			billiards.A_findColor(src, 0, 40, 40, 60, 140, 140, 255, 160, 0, ball_yellow);
+			billiards.A_findColor(src, 110, 110, 110, 240, 255, 255, 0, 0, 0, ball_white);
 
 
 			//billiards.A_findColor(src, 119, 102, 117, 179, 255, 255, 0, 255, 0, ball_red);
@@ -86,7 +88,7 @@ int main(int argc, char** argv) {
 				cushion_frame_ignore--;
 			}
 			else {
-				cushion_flag = billiards.collisionWithWall(src, Rect(5, 7, 427, 215), ball_yellow, cushionCount);
+				cushion_flag = billiards.collisionWithWall(src, Rect(50, 30, 550, 290), ball_yellow, cushionCount);
 				//billiards.collisionWithWall(src, Rect(50, 40, 550, 270), ball_white, cushionCount);
 			}
 			if (cushion_frame_ignore == 0) {
