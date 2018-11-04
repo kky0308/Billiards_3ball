@@ -1,11 +1,17 @@
 #include <math.h>
-#include <opencv2/opencv.hpp>
 #include <iostream>
+#include <cmath>
+#include <vector>
+#include <stdlib.h>
+#include <stdio.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <opencv2/opencv.hpp>
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
-#include <cmath>
-#include <vector>
+
+#pragma comment (lib , "ws2_32.lib")
 //#include <thread>
 using namespace cv;
 
@@ -39,8 +45,8 @@ public:
 	void collision(Mat& image, Ball& mainBall, Ball& sub1, Ball& sub2);				//공의 충돌여부
 	bool Collision_Success();
 	//쿠션
-	bool collisionWithWall(Mat& image, Rect wall, Ball ball, int& cushionCount);	//쿠션과 공의 충돌여부
-	bool is3CushionSuccess(int& cushionCount);										//3쿠션 성공여부
+	bool collisionWithWall(Mat& image, Rect wall, Ball ball);	//쿠션과 공의 충돌여부
+	bool is3CushionSuccess(int* cushionCount);										//3쿠션 성공여부
 	void clear();
 																					//공 찾기
 	void A_findColor(cv::Mat& image, int min_H, int min_S, int min_V, int max_H, int max_S, int max_V, int r, int g, int b, Ball& ball);
